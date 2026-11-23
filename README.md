@@ -1,13 +1,41 @@
-# paperfolds
+# paperfolds · house-hunting
 
-Hand-drawn paper things that fold open in your browser. Every fold lives on its own branch;
-`main` is the shelf that links to them all.
+A house-hunting companion drawn as a pop-up floor plan. The sheet tilts back and the paper walls
+fold up room by room: a 3BHK with three bedrooms (each with its own washroom), a common washroom,
+kitchen, hall, dining, and front and back balconies.
 
-| Branch | What it is |
-|--------|------------|
-| [`wedding-invite`](../../tree/wedding-invite) | A wax-sealed envelope. Break the seal and the letter unfolds into a hand-drawn map of the wedding weekend: tap an event for details, maps and calendar, RSVP into a Google Sheet. Per-guest links, Hindi / English. |
-| [`house-hunting`](../../tree/house-hunting) | A 3BHK floor plan whose walls pop up. Every room has a *must-have* and a *dream* checklist; add the houses you visit and see how each scores, room by room. |
-| [`family`](../../tree/family) | A five-sided paper lantern, one face per family member. Spin it, then let it unroll into five cards. |
+> This is the `house-hunting` branch of [paperfolds](../../tree/main). Other folds live on other branches.
+
+## Use it
+
+- **My checklist**: click any room (or *the whole house*) to see its list, split into
+  **must-haves** (realistic: walk away without these) and **dream** (would make it feel like ours).
+  Add, remove, or move items between the two with ↑ / ↓.
+- **+ a house we saw**: every house you visit gets a card: area, price or rent, size, date seen,
+  listing link, a gut-feeling star rating and notes. Click rooms and tick what this house has.
+- The plan colours itself for the selected house: **green** = every item, **amber** = all
+  must-haves but missing some dreams, **red** = a must-have is missing. The card lists what's still
+  missing across the whole house.
+- **Compare** (with two or more houses) ranks them (must-haves weigh 3× dreams, stars break ties)
+  with a room-by-room grid.
+- **Flat plan** lays the walls down for a plain top view.
+
+Everything is saved in your browser. **Export** downloads a JSON file you can **import** on
+another phone or laptop, or send to family so everyone ticks the same lists.
+
+## Change the house
+
+`src/house.config.ts` holds the rooms, where each sits on the 100 × 72 plan (`box: [x, y, w, h]`),
+and the default must / dream items. A different layout (2BHK, a villa) is just different boxes.
+
+## How the walls pop up
+
+Each room is a floor tile (`<button>`) with furniture drawn in SVG and paper walls hinged on its
+edges. A top wall is `rotateX(90deg)` about its top edge, a left wall `rotateY(-90deg)` about its
+left edge, and so on; flat, they lie on the floor and are hidden. To avoid two walls on every
+shared edge, each room only owns its top and left walls, plus bottom/right on the outside of the
+house. Balcony walls on the outside become half-height railings. Room labels counter-rotate by
+the inverse of the plan's tilt (`rotateZ(18deg) rotateX(-52deg)`) so they stand up facing you.
 
 ## Run
 
