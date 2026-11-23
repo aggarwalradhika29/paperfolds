@@ -1,13 +1,32 @@
-# paperfolds
+# paperfolds · family
 
-Hand-drawn paper things that fold open in your browser. Every fold lives on its own branch;
-`main` is the shelf that links to them all.
+A five-sided paper lantern, one face per family member, lit from inside. Drag it (or use the
+arrows) to spin it round; tap the face at the front and the lantern unrolls into a strip of five
+cards, with that person's card open below: the three words that are so them, what they light up
+about, their superpower, a perfect Sunday, and the thing they always say.
 
-| Branch | What it is |
-|--------|------------|
-| [`wedding-invite`](../../tree/wedding-invite) | A wax-sealed envelope. Break the seal and the letter unfolds into a hand-drawn map of the wedding weekend: tap an event for details, maps and calendar, RSVP into a Google Sheet. Per-guest links, Hindi / English. |
-| [`house-hunting`](../../tree/house-hunting) | A 3BHK floor plan whose walls pop up. Every room has a *must-have* and a *dream* checklist; add the houses you visit and see how each scores, room by room. |
-| [`family`](../../tree/family) | A five-sided paper lantern, one face per family member. Spin it, then let it unroll into five cards. |
+> This is the `family` branch of [paperfolds](../../tree/main). Other folds live on other branches.
+
+## Make it your family
+
+Edit **`src/family.config.ts`**. Each member has a `name`, `role`, three `words`, `loves`,
+`superpower`, `sunday`, `says`, a `color` and a `doodle` (`wrench`, `plant`, `laptop`, `music`,
+`cricket`, `book`, `coffee`, `camera`; add your own in `src/family/Doodles.tsx`). The five here
+are placeholders.
+
+Keys: ← / → spin (or move between cards once unrolled), Esc rolls it back up.
+
+## How the lantern works
+
+It's a regular pentagonal prism made of five `<button>`s. Face *i* is
+`rotateY(i·72°) translateZ(a)`, where `a = w / (2·tan 36°)` is the pentagon's apothem, and the top
+and bottom caps are pentagons (`clip-path`) with circumradius `w / (2·sin 36°)`, turned 90° and
+pushed out by half the height.
+
+Unrolling keeps the same transform list and only changes the numbers: every face goes to
+`rotateY(θ) translateZ(0) translateX((i−2)·w)`, where θ is whichever angle ≡ the lantern's spin
+(mod 360°) is nearest that face's own angle. That cancels the lantern's rotation with the least
+turning, so the faces swing out and lie flat side by side instead of spinning wildly.
 
 ## Run
 
