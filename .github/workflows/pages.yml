@@ -1,0 +1,47 @@
+# Builds every fold and publishes them together on GitHub Pages:
+#   /            -> main (the shelf)
+#   /<branch>/   -> each fold branch
+name: pages
+on:
+  push:
+    branches: [main, wedding-invite, house-hunting, family]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build each branch
+        run: |
+          set -e
+          mkdir -p site
+          for b in main wedding-invite house-hunting family; do
+            if ! git rev-parse --verify --quiet "origin/$b" >/dev/null; then echo "skip $b"; continue; fi
+            rm -rf "/tmp/w-$b" && git worktree add "/tmp/w-$b" "origin/$b"
+            (cd "/tmp/w-$b" && npm ci --no-audit --no-fund && npm run build)
+            if [ "$b" = main ]; then cp -r "/tmp/w-$b/dist/." site/; else mkdir -p "site/$b" && cp -r "/tmp/w-$b/dist/." "site/$b/"; fi
+          done
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

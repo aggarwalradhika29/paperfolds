@@ -1,0 +1,98 @@
+.shelf {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 56px 16px 40px;
+}
+.shelf header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.shelf h1 {
+  font-size: clamp(3rem, 9vw, 5rem);
+  margin: 0;
+  line-height: 1;
+}
+.shelf header p {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px 28px;
+}
+.cards li {
+  perspective: 900px;
+  transform: rotate(var(--tilt));
+}
+/* A tent card: the drawn flap lifts on hover to show the inside. */
+.tent {
+  position: relative;
+  display: block;
+  height: 300px;
+  color: inherit;
+  text-decoration: none;
+  transform-style: preserve-3d;
+}
+.tent .inside {
+  position: absolute;
+  inset: 0;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-top: 6px solid var(--tint);
+}
+.tent .inside h2 {
+  margin: 0 0 6px;
+  font-size: 1.6rem;
+}
+.tent .inside p {
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+.tent code {
+  font-family: var(--hand);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.tent .flap {
+  position: absolute;
+  inset: 0 0 45% 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  transform-origin: top center;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  backface-visibility: hidden;
+}
+.tent .flap svg {
+  width: 70%;
+}
+.tent:hover .flap,
+.tent:focus-visible .flap {
+  transform: rotateX(-160deg);
+}
+.tent:focus-visible {
+  outline: 2px dashed var(--ink);
+  outline-offset: 6px;
+}
+.shelf footer {
+  text-align: center;
+  margin-top: 56px;
+  color: var(--ink-soft);
+}
+.shelf footer a {
+  color: inherit;
+}
+@media (hover: none) {
+  .tent .flap {
+    inset: 0 0 62% 0;
+  }
+  .tent .flap svg {
+    width: 38%;
+  }
+}
