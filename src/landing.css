@@ -32,7 +32,7 @@
 .tent {
   position: relative;
   display: block;
-  height: 300px;
+  height: 340px;
   color: inherit;
   text-decoration: none;
   transform-style: preserve-3d;
@@ -61,7 +61,7 @@
 }
 .tent .flap {
   position: absolute;
-  inset: 0 0 45% 0;
+  inset: 0 0 53% 0;
   z-index: 2;
   display: grid;
   place-items: center;
